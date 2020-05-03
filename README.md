@@ -26,3 +26,18 @@ In this section, the building process of the drone will be described.
 | NEO-M8N GPS Module | 1         | 29g | 29g | [AliExpress](https://de.aliexpress.com/item/33054561368.html) |
 | 3DR 500MW 433 MHz Telemetry Module  | 1         | 45g | 45g | [AliExpress](https://de.aliexpress.com/item/4000255803909.html) |
 | 3S Lipo Battery XXXmAh | 1         |  |  |  |
+
+### Thrust Estimation
+The motor, propeller and battery combination listed above must provide enough thrust to lift the whole drone. In order to achieve this, we want a thrust/weight ratio greater than 1.5. According to experiments with similar motor/propeller/battery setup, we can expect following estimates:
+
+| Thrust per Motor | Maximum Total Thrust | Maximum Current Draw |
+|------------------|----------------------|----------------------|
+| 600 | 2400 | XXA |
+
+<br>
+
+| Total Weight | Target T/R Ratio | Target Thrust |
+|--------------|------------------|---------------|
+| XXX | 1.5 | XXX |
+
+As we can see by comparing maximum total thrust and target thrust, our final drone should be able to lift itself into the air. Furthermore, we also must make sure that the maximum current draw can be handled by the ESC, which in our case is fine.
