@@ -69,7 +69,6 @@ Servo ESC; // Create a servo object to control the ESC
 
 void setup() {
   // Put your setup code here, to run once:
-  Serial.begin(9600);  
   ESC.attach(9,1000,2000); // (pin, min pulse width, max pulse width in microseconds) 
 }
 
