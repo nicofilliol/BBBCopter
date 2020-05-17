@@ -8,8 +8,8 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-   int potValue = analogRead(A0);   // reads the value of the potentiometer (value between 0 and 1023)
-   potValue = map(potValue, 0, 1023, 0, 180);   // scale it to use it with the servo library (value between 0 and 180, usually degrees for a servo motor -> corresponds to motor speed in this case)
+  // Put your main code here, to run repeatedly:
+   int potValue = analogRead(A0);   // Reads the value of the potentiometer (value between 0 and 1023)
+   potValue = map(potValue, 0, 1023, 0, 180);   // Scale it for use with the servo library (value between 0 and 180, usually degrees for a servo motor -> corresponds to motor speed in this case)
    ESC.write(potValue); // Send the signal to the ESC
 }
