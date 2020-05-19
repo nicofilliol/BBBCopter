@@ -52,6 +52,8 @@ The wiring goes as follows:
 
 ![Motor ESC Wiring Diagram](images/Motor_ESC_Diagram.png)
 
+**IMPORTANT: Make sure that the BEC of the ESC outputs 5V, otherwise it might damage the Arduino.**
+
 Depending on the ESC you have, there might be different colors for the three smaller wires in the middle:
 
 | Color | Alternative Color | Pin |
@@ -80,3 +82,11 @@ void loop() {
 }
 ```
 In case you're not using a potentiometer, just directly use `ESC.write()` with different values (0-180) to control the speed of the motor.
+
+### ESC Calibration
+ESC calibration means to set the max and min speeds of the motor with respect to the max and min width of the PWM signal sent by either the Arduino or any other device controlling the ESC. This usually has to be done the first time switching to a new setup/controller. The steps are as follows:
+
+1. Make sure that the ESC is not connected to any power (Lipo).
+2. Send the highest throttle PWM signal (e.g. turn potentiometer all the way up)
+3. Plug in the battery and the ESC should now output a musical tone and two beeps indicating it is in calibration mode.
+4. Lower the throttle PWM signal to full down. You should hear a couple of beeps (number of cells in your battery) and one final long beep indicating that the end points have been set and the ESC is calibrated.
