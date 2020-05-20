@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <Servo.h>
 
 Servo ESC; // Create a servo object to control the ESC
