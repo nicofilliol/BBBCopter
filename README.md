@@ -27,6 +27,8 @@ In this section, the building process of the drone will be described.
 | 3DR 500MW 433 MHz Telemetry Module  | 1         | 45g | 45g | [AliExpress](https://de.aliexpress.com/item/4000255803909.html) |
 | 3S Lipo Battery XXXmAh | 1         | 175g | 175g | [Conrad](https://www.conrad.ch/de/p/swaytronic-modellbau-akkupack-lipo-11-1-v-2200-mah-zellen-zahl-3-35-c-softcase-t-2514578.html) |
 
+Furthermore, a transmitter will be needed to fly the drone. Make sure it is one that is compatible with the receiver. For this project, a Spektrum DX6 transmitter will be used.
+
 ### Thrust Estimation
 The motor, propeller and battery combination listed above must provide enough thrust to lift the whole drone. In order to achieve this, we want a thrust/weight ratio greater than 1.5. According to experiments with similar motor/propeller/battery setup, we can expect following estimates:
 
@@ -110,3 +112,6 @@ The steps to bind the receiver to the transmitter are as follows:
 6. Release the BIND button after the receiver's LED stays illuminated. The receiver should now be bound to the transmitter.
 7. Turn off the transmitter, disconnect the battery and remove the bind plug and now you are ready to continue.
 
+Now, we can use our transmitter and receiver setup to control the ESC and therefore the motor. Connect everything as seen in the picture below (channel 1 = THRO port, or whatever channel should control the ESC) and make sure to [calibrate the ESC](#esc-calibration) by following the steps mentioned above.
+
+![Receiver Diagram](images/Receiver_Diagram.png)
