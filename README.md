@@ -90,3 +90,23 @@ ESC calibration means to set the max and min speeds of the motor with respect to
 2. Send the highest throttle PWM signal (e.g. turn potentiometer all the way up)
 3. Plug in the battery and the ESC should now output a musical tone and two beeps indicating it is in calibration mode.
 4. Lower the throttle PWM signal to full down. You should hear a couple of beeps (number of cells in your battery) and one final long beep indicating that the end points have been set and the ESC is calibrated.
+
+### RC Receiver
+In order to test the RC receiver in our setup, we first have to bind it to the transmitter. Hereafter, the process will be described for the S603 receiver (DSMX compatible) and a Spektrum DX6 trasnmitter. Other setups might include different steps.
+
+In order to bind the Spektrum transmitter and the receiver, apart from them, we also need our Lipo battery, one esc and the bind plug that should have come with the receiver. In case no bind plug is available, two simple jumper cables and a breadboard will do as well.
+
+In order to activate the receiver's binding mode, we have to short-circuit pin 1 and pin 3 of the BIND/DATA port (in the following diagram, we will be using channel 1 for demonstration purposes). As said before, this can either be done with the bind plug or a simple short-circuit setup.
+
+The steps to bind the receiver to the transmitter are as follows:
+
+![Binding Receiver Diagram](images/ReceiverBinding_Diagram.png)
+
+1. Lower the throttle (left stick) of the transmitter to the lowest position and make sure that the transmitter is powered OFF.
+2. Insert the bind plug (i.e. short-circuit pin 1 and 3) into the BIND/DATA port
+3. Insert the ESC plug into the battery port or if not available, into any other free port.
+4. Connect the battery to the ESC. The receiver's LED will flash rapidly when the receiver is ready to bind.
+5. While pressing the BIND button, power on the transmitter.
+6. Release the BIND button after the receiver's LED stays illuminated. The receiver should now be bound to the transmitter.
+7. Turn off the transmitter, disconnect the battery and remove the bind plug and now you are ready to continue.
+
