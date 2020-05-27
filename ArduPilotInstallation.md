@@ -12,7 +12,7 @@ Direct Link to file used in this tutorial: [Bone Debian 10.4](https://rcn-ee.net
 2. Next, you'll need to flash the image to a microSD card. The easiest way to do this is by using [Etcher](https://www.balena.io/etcher/). Follow the steps in the app, the process itself should then be self-explanatory.
 
 3. We now have to connect to the BeagleBone over SSH. There are a few different options to do this (please also refer to the official [Getting Started](https://beagleboard.org/getting-started) page). \
-_Option 1_: Connect the BeagleBoard to your computer over USB and install [drivers](https://beagleboard.org/getting-started#troubleshooting) according to your operating system. Then ssh into the BB using:
+_Option 1_: Connect the BeagleBoard to your computer over USB and install [drivers](https://beagleboard.org/getting-started#troubleshooting) according to your operating system. Then SSH into the BB using:
     ```shell
     ssh debian@192.168.6.2 # for Linux/Mac OS or 192.168.7.2 for Windows
     ```
@@ -54,3 +54,48 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     ip addr show wlan0
     ``` 
     Now try SSHing into your BBBlue using its WiFi IP address. Make sure that your computer is now connected to the same WiFi network. So in case you've been connected to the BeagleBone's WiFi hotspot, make sure to change networks first.
+
+6. In order to install and update required software, run the following commands:
+    ```shell
+    sudo apt-get -y update
+    sudo apt-get -y dist-upgrade
+    sudo apt-get install -y cpufrequtils git
+    ```
+
+7. Update the scripts: 
+    ```shell 
+    cd /opt/scripts && git pull
+    ```
+
+8. Specify real-time kernel 4_19: 
+    ```shell 
+    sudo /opt/scripts/tools/update_kernel.sh --lts-4_19 --bone-rt-channel 
+    ```
+
+9. Specify the device tree binary used at startup:
+    ```shell
+    sudo sed -i 's/#dtb=/dtb=am335x-boneblue.dtb/g' /boot/uEnv.txt
+    ```
+
+10. Specifiy device tree overlays:
+    ```shell
+    sudo sed -i 's|#dtb_overlay=/lib/firmware/<file8>.dtbo|dtb_overlay=/lib/firmware/BB-I2C1-00A0.dtbo\n#dtb_overlay=/lib/firmware/BB-UART4-00A0.dtbo\n#dtb_overlay=/lib/firmware/BB-ADC-00A0.dtbo|g' /boot/uEnv.txt
+    ```
+
+11. Specifiy U-Boot overlay:
+    ```shell
+    sudo sed -i 's|uboot_overlay_pru=/lib/firmware/AM335X-PRU-RPROC-4-14-TI-00A0.dtbo|#uboot_overlay_pru=/lib/firmware/AM335X-PRU-RPROC-4-14-TI-00A0.dtbo|g' /boot/uEnv.txt
+    sudo sed -i 's|#uboot_overlay_pru=/lib/firmware/AM335X-PRU-UIO-00A0.dtbo|uboot_overlay_pru=/lib/firmware/AM335X-PRU-UIO-00A0.dtbo|g' /boot/uEnv.txt
+    ```
+
+12. Set clock frequency:
+    ```shell
+    sudo sed -i 's/GOVERNOR="ondemand"/GOVERNOR="performance"/g' /etc/init.d/cpufrequtils
+    ```
+
+13. Reboot now:
+    ```shell
+    sudo reboot
+    ```
+
+*__Troubleshooting__: If you experience a `RCOutputAioPRU.cpp:SIGBUS error`, there are two things you could try. Wiping the eMMC boot sector with `sudo dd if=/dev/zero of=/dev/mmcblk1 bs=1M count=10` might potentially help, as well as updating the bootlaoder with `sudo /opt/scripts/tools/developers/update_bootloader.sh`.*
