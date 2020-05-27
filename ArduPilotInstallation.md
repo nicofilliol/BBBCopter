@@ -99,3 +99,115 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     ```
 
 *__Troubleshooting__: If you experience a `RCOutputAioPRU.cpp:SIGBUS error`, there are two things you could try. Wiping the eMMC boot sector with `sudo dd if=/dev/zero of=/dev/mmcblk1 bs=1M count=10` might potentially help, as well as updating the bootlaoder with `sudo /opt/scripts/tools/developers/update_bootloader.sh`.*
+
+## Installing ArduPilot
+1. First step is to create the ArduPilot configuration file by typing:
+    ```shell
+    sudoedit /etc/default
+    ```
+    In this file, we'll add our configuration parameters: 
+    ```
+    TELEM1="-A udp:<target IP address>:14550" 
+    GPS="-B /dev/ttyO2"
+    TELEM2="-C /dev/ttyO1"
+    ```
+
+    * `-A` is a console switch. Usually this is a Wi-Fi link where you can specify the IP address of the device with the ground control station. It maps ArduPilot's _Console_ serial port (SERIAL0, default baud rate: 115'200) to the specified IP address. This allows to have MAVLink data coming over WiFi for test purposes and is reliably auto-sensed by Mission Planner and QGroundControl. 
+
+    * `-B`is used to specify non default GPS. In this case, it maps ArduPilot's _GPS_ serial port (SERIAL 3, default baud rate: 57'600) to the BeagleBone's UART2 (the UART marked with GPS on the board).
+
+    * `C` is a telemetry switch. It maps ArduPilot's _Telem1_ serial port (SERIAL1, default baud rate: 57'600) to the BBBlue's UART1 where a telemetry module can be connected to. This is useful for a bidirectional data link between the drone and the groundstation.
+
+    All the possibilities that exist can be seen in the following list:
+    ```
+    Switch -A  -->  "Console", SERIAL0, default 115200
+    Switch -B  -->  "GPS", SERIAL3, default 57600
+    Switch -C  -->  "Telem1", SERIAL1, default 57600
+    Switch -D  -->  "Telem2", SERIAL2, default 38400
+    Switch -E  -->  Unnamed, SERIAL4, default 38400
+    Switch -F  -->  Unnamed, SERIAL5, default 57600
+    ```
+    Check out the official [ArduPilot documentation](https://ardupilot.org/plane/docs/parameters.html?highlight=parameters) for further details on serial ports and parameters.
+
+2. Next, we'll create the ArduPilot _systemd service files_, in this case for ArduCopter. The process for ArduPlane and ArduRover look accordingly, just switch names everywhere and adjust the _conflicts_ section.
+
+    Create the file (using `nano /lib/systemd/system/arducopter.service` or whatever tool you want to use) and add the following content:
+    ```
+    [Unit]
+    Description=ArduCopter Service
+    After=networking.service
+    StartLimitIntervalSec=0
+    Conflicts=arduplane.service ardurover.service antennatracker.service
+
+    [Service]
+    EnvironmentFile=/etc/default/ardupilot
+    ExecStartPre=/usr/bin/ardupilot/aphw
+    ExecStart=/usr/bin/ardupilot/arducopter $TELEM1 $TELEM2 $GPS
+
+    Restart=on-failure
+    RestartSec=1
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+    Make sure to provide the name of all environment variables created in step 1 on the `ExecStart` line.
+
+3. Create a new directory:
+    ```shell
+    sudo mkdir -p /usr/bin/ardupilot
+    ```
+
+    Then we'll create a ArduPilot hardware configuration file at `/usr/bin/ardupilot/aphw`, which is run by the services defined in step 2 prior to running the ArduPilot executables:
+
+    ```
+    #!/bin/bash
+    # aphw
+    # ArduPilot hardware configuration.
+
+    /bin/echo 80 >/sys/class/gpio/export
+    /bin/echo out >/sys/class/gpio/gpio80/direction
+    /bin/echo 1 >/sys/class/gpio/gpio80/value
+    /bin/echo pruecapin_pu >/sys/devices/platform/ocp/ocp:P8_15_pinmux/state
+    ```
+    Lines 5-7 switch on power to the BBBlue's +5V servo rail - i.e. for when you're using servos. This is not necessary for ESCs.
+    Line 8 enables the PRU.
+
+4. Let's make the file executable by setting the right permissions:
+    ```shell
+    sudo chmod 0755 /usr/bin/ardupilot/aphw
+    ```
+
+5. Now we have to get the latest ArduCopter (or ArduPlane, ArduRover) executable, built specifically for the BeagleBone Blue's ARM architecture. 
+
+    Compiling the on the BeagleBone itself works as follows but it will take quite some time:
+    ```shell
+    sudo apt-get install g++ make pkg-config python python-dev python-lxml python-pip
+    sudo pip install future
+    git clone https://github.com/ArduPilot/ardupilot
+    cd ardupilot
+    git branch -a  # <-- See all available branches.
+    git checkout Copter-3.6  # <-- Select one of the ArduCopter branches.
+    git submodule update --init --recursive
+    ./waf configure --board=blue  # <-- BeagleBone Blue.
+    ./waf
+    sudo cp ./build/blue/bin/a* /usr/bin/ardupilot
+    sudo chmod 0755 /usr/bin/ardupilot/a*
+    ```
+
+6. To start ArduPilot, type the following line and after a reboot, the ArduPilot should inflate automatically which can be seen by a flashing red LED. 
+    ```shell
+    sudo systemctl enable arducopter.service
+    ``` 
+
+    Of course, if you have done the previous steps for other services as well, you can also start ArduPlane OR ArduRover using:
+    ```shell 
+    sudo systemctl enable arduplane.service
+    sudo systemctl enable ardurover.service
+    ```
+
+    Make sure to familiarise yourself with `systemctl`, espcially with following commands:
+    ```shell
+    sudo systemctl disable <name of service>
+    sudo systemctl start <name of service>
+    sudo systemctl stop <name of service>
+    ```
