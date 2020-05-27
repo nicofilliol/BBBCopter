@@ -21,3 +21,36 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     ```shell
     ssh debian@192.168.8.1 # default password: temppwd
     ```
+
+4. In order to make the process less tedious, we give the debian user (subsequent) sudo access without re-entering the password every time.
+    ```shel
+    echo "debian ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/debian >/dev/null
+    ```
+
+5. We have to connect the BBBlue to the internet so that we can easily install updates and new software. Take note of your router's SSID and WiFi password. Then type:
+    ```shell
+    sudo -s
+    connmanctl services | grep '<your SSID>' | grep -Po 'wifi_[^ ]+'
+    ```
+    The respnose will be a hash that looks something like *wifi_38d279e099a8_4254487562142d4355434b_managed_psk*. 
+
+    Now using this hash, we're going to edit a file using nano. Create the file and open the editor with:
+    ```shell
+    nano /var/lib/connman/wifi.config
+    ``` 
+    Now enter the following contents into the file:
+    ```
+    [service_<your hash>]
+    Type = wifi
+    Security = wpa2
+    Name = <your SSID>
+    Passphrase = <your WiFi password>
+    ```
+
+    Click CTRL-O to save the file (make sure to confirm using enter) and CTRL-C to quit the editor.
+
+    A prominent green LED should start to light up, signifying that the BBlue is connected to the WiFi. In order to get its IP address, type:
+    ```shell
+    ip addr show wlan0
+    ``` 
+    Now try SSHing into your BBBlue using its WiFi IP address. Make sure that your computer is now connected to the same WiFi network. So in case you've been connected to the BeagleBone's WiFi hotspot, make sure to change networks first.
