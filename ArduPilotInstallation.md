@@ -116,7 +116,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
 
     * `-B`is used to specify non default GPS. In this case, it maps ArduPilot's _GPS_ serial port (SERIAL 3, default baud rate: 57'600) to the BeagleBone's UART2 (the UART marked with GPS on the board).
 
-    * `C` is a telemetry switch. It maps ArduPilot's _Telem1_ serial port (SERIAL1, default baud rate: 57'600) to the BBBlue's UART1 where a telemetry module can be connected to. This is useful for a bidirectional data link between the drone and the groundstation.
+    * `-C` is a telemetry switch. It maps ArduPilot's _Telem1_ serial port (SERIAL1, default baud rate: 57'600) to the BBBlue's UART1 where a telemetry module can be connected to. This is useful for a bidirectional data link between the drone and the groundstation.
 
     All the possibilities that exist can be seen in the following list:
     ```
@@ -129,7 +129,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     ```
     Check out the official [ArduPilot documentation](https://ardupilot.org/plane/docs/parameters.html?highlight=parameters) for further details on serial ports and parameters.
 
-2. Next, we'll create the ArduPilot _systemd service files_, in this case for ArduCopter. The process for ArduPlane and ArduRover look accordingly, just switch names everywhere and adjust the _conflicts_ section.
+2. Next, we'll create the ArduPilot _systemd service files_, in this case for ArduCopter. The process for ArduPlane and ArduRover looks accordingly, just switch names everywhere and adjust the _conflicts_ section.
 
     Create the file (using `nano /lib/systemd/system/arducopter.service` or whatever tool you want to use) and add the following content:
     ```
@@ -179,7 +179,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
 
 5. Now we have to get the latest ArduCopter (or ArduPlane, ArduRover) executable, built specifically for the BeagleBone Blue's ARM architecture. 
 
-    Compiling the on the BeagleBone itself works as follows but it will take quite some time:
+    Compiling on the BeagleBone itself works as follows but it will take quite some time:
     ```shell
     sudo apt-get install g++ make pkg-config python python-dev python-lxml python-pip
     sudo pip install future
