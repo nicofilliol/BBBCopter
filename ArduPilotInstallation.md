@@ -32,7 +32,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     sudo -s
     connmanctl services | grep '<your SSID>' | grep -Po 'wifi_[^ ]+'
     ```
-    The respnose will be a hash that looks something like *wifi_38d279e099a8_4254487562142d4355434b_managed_psk*. 
+    The response will be a hash that looks something like *wifi_38d279e099a8_4254487562142d4355434b_managed_psk*. 
 
     Now using this hash, we're going to edit a file using nano. Create the file and open the editor with:
     ```shell
@@ -67,9 +67,9 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     cd /opt/scripts && git pull
     ```
 
-8. Specify real-time kernel 5_4: 
+8. Specify real-time kernel 4_9: 
     ```shell 
-    sudo /opt/scripts/tools/update_kernel.sh --lts-5_4 --bone-rt-channel
+    sudo /opt/scripts/tools/update_kernel.sh --lts-4_9 --bone-rt-channel
     ```
 
 9. Specify the device tree binary used at startup:
