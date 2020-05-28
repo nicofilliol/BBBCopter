@@ -9,7 +9,7 @@ Make sure for all the following steps that the BeagleBone Blue is connected to a
 1. Get the latest image for the BeagleBone Blue frome this [link](https://rcn-ee.net/rootfs/bb.org/testing/). Choose the __most recent date__, then the folder __buster-console__ and download the file called _bone-debian-XX.X-console-armhf-YEAR-MONTH-DAY-1gb.img.xz \
 Direct Link to file used in this tutorial: [Bone Debian 10.4](https://rcn-ee.net/rootfs/bb.org/testing/2020-05-18/buster-console/bone-debian-10.4-console-armhf-2020-05-18-1gb.img.xz)
 
-2. Next, you'll need to flash the image to a microSD card. The easiest way to do this is by using [Etcher](https://www.balena.io/etcher/). Follow the steps in the app, the process itself should then be self-explanatory.
+2. Next, you'll need to flash the image to a microSD card. The easiest way to do this is by using [Etcher](https://www.balena.io/etcher/). Follow the steps in the app, the process itself should then be self-explanatory. Insert the SD card, then press the SD button in the corner of the BeagleBone and plug in the power cable to boot up the BBB.
 
 3. We now have to connect to the BeagleBone over SSH. There are a few different options to do this (please also refer to the official [Getting Started](https://beagleboard.org/getting-started) page). \
 _Option 1_: Connect the BeagleBoard to your computer over USB and install [drivers](https://beagleboard.org/getting-started#troubleshooting) according to your operating system. Then SSH into the BB using:
@@ -53,7 +53,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     ```shell
     ip addr show wlan0
     ``` 
-    Now try SSHing into your BBBlue using its WiFi IP address. Make sure that your computer is now connected to the same WiFi network. So in case you've been connected to the BeagleBone's WiFi hotspot, make sure to change networks first.
+    Now try SSHing into your BBBlue using its WiFi IP address (the one right next to inet without the `/XX`). Make sure that your computer is now connected to the same WiFi network. So in case you've been connected to the BeagleBone's WiFi hotspot, make sure to change networks first.
 
 6. In order to install and update required software, run the following commands:
     ```shell
@@ -93,7 +93,12 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     sudo sed -i 's/GOVERNOR="ondemand"/GOVERNOR="performance"/g' /etc/init.d/cpufrequtils
     ```
 
-13. Reboot now:
+13. Maximize the microSD card's existing partition as you might run into storage problems later on otherwise: 
+    ```shell 
+    sudo /opt/scripts/tools/grow_partition.sh
+    ```
+
+14. Reboot now:
     ```shell
     sudo reboot
     ```
@@ -103,7 +108,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
 ## Installing ArduPilot
 1. First step is to create the ArduPilot configuration file by typing:
     ```shell
-    sudoedit /etc/default
+    sudoedit /etc/default/ardupilot
     ```
     In this file, we'll add our configuration parameters: 
     ```
@@ -131,7 +136,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
 
 2. Next, we'll create the ArduPilot _systemd service files_, in this case for ArduCopter. The process for ArduPlane and ArduRover looks accordingly, just switch names everywhere and adjust the _conflicts_ section.
 
-    Create the file (using `nano /lib/systemd/system/arducopter.service` or whatever tool you want to use) and add the following content:
+    Create the file (using `sudoedit /lib/systemd/system/arducopter.service` or whatever tool you want to use) and add the following content:
     ```
     [Unit]
     Description=ArduCopter Service
@@ -157,7 +162,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     sudo mkdir -p /usr/bin/ardupilot
     ```
 
-    Then we'll create a ArduPilot hardware configuration file at `/usr/bin/ardupilot/aphw`, which is run by the services defined in step 2 prior to running the ArduPilot executables:
+    Then we'll create a ArduPilot hardware configuration file with `sudoedit /usr/bin/ardupilot/aphw`, which is run by the services defined in step 2 prior to running the ArduPilot executables:
 
     ```
     #!/bin/bash
@@ -186,7 +191,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     git clone https://github.com/ArduPilot/ardupilot
     cd ardupilot
     git branch -a  # <-- See all available branches.
-    git checkout Copter-3.6  # <-- Select one of the ArduCopter branches.
+    git checkout Copter-3.6.8-hotfix # <-- Select one of the ArduCopter branches.
     git submodule update --init --recursive
     ./waf configure --board=blue  # <-- BeagleBone Blue.
     ./waf
