@@ -67,9 +67,9 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     cd /opt/scripts && git pull
     ```
 
-8. Specify real-time kernel 4_19: 
+8. Specify real-time kernel 5_4: 
     ```shell 
-    sudo /opt/scripts/tools/update_kernel.sh --lts-4_19 --bone-rt-channel 
+    sudo /opt/scripts/tools/update_kernel.sh --lts-5_4 --bone-rt-channel
     ```
 
 9. Specify the device tree binary used at startup:
