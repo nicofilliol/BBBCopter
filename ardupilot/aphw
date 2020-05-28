@@ -1,0 +1,8 @@
+#!/bin/bash
+# aphw
+# ArduPilot hardware configuration.
+
+/bin/echo 80 >/sys/class/gpio/export
+/bin/echo out >/sys/class/gpio/gpio80/direction
+/bin/echo 1 >/sys/class/gpio/gpio80/value
+/bin/echo pruecapin_pu >/sys/devices/platform/ocp/ocp:P8_15_pinmux/state
