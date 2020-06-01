@@ -47,7 +47,7 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     Passphrase = <your WiFi password>
     ```
 
-    Click CTRL-O to save the file (make sure to confirm using enter) and CTRL-C to quit the editor.
+    Click CTRL-O to save the file (make sure to confirm using enter) and CTRL-X to quit the editor.
 
     A prominent green LED should start to light up, signifying that the BBlue is connected to the WiFi. In order to get its IP address, type:
     ```shell
