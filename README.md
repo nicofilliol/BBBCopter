@@ -25,7 +25,7 @@ In this section, the building process of the drone will be described.
 | S603 6CH 2.4GHz PPM Receiver | 1         | 12g | 12g | [AliExpress](https://de.aliexpress.com/item/4000340190534.html) |
 | NEO-M8N GPS Module | 1         | 29g | 29g | [AliExpress](https://de.aliexpress.com/item/33054561368.html) |
 | 3DR 500MW 433 MHz Telemetry Module  | 1         | 45g | 45g | [AliExpress](https://de.aliexpress.com/item/4000255803909.html) |
-| 3S Lipo Battery XXXmAh | 1         | 175g | 175g | [Conrad](https://www.conrad.ch/de/p/swaytronic-modellbau-akkupack-lipo-11-1-v-2200-mah-zellen-zahl-3-35-c-softcase-t-2514578.html) |
+| 3S Lipo Battery 2200mAh | 1         | 175g | 175g | [Conrad](https://www.conrad.ch/de/p/swaytronic-modellbau-akkupack-lipo-11-1-v-2200-mah-zellen-zahl-3-35-c-softcase-t-2514578.html) |
 
 Furthermore, a transmitter will be needed to fly the drone. Make sure it is one that is compatible with the receiver. For this project, a Spektrum DX6 transmitter will be used.
 
@@ -40,7 +40,7 @@ The motor, propeller and battery combination listed above must provide enough th
 
 | Total Weight | Target T/R Ratio | Target Thrust |
 |--------------|------------------|---------------|
-| XXX | 1.5 | XXX |
+| 910g | 1.5 | 1365g |
 
 As we can see by comparing maximum total thrust and target thrust, our final drone should be able to lift itself into the air. Furthermore, we also must make sure that the maximum current draw can be handled by the ESC, which in our case is fine.
 
