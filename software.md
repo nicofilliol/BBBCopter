@@ -1,6 +1,6 @@
 # ArduPilot Installation
 
-In this section, we will go over the steps to prepare the BeagleBone Blue as well as the installation process of ArduPilot.
+In this section, we will go over the steps to prepare the BeagleBone Blue as well as the installation process of ArduPilot. The following guide is mostly based on the one that can be found here: https://github.com/imfatant/test. Definitely make sure to check out this repo in case that you run into any problems as it contains a lot more details.
 
 ## BeagleBone Blue Setup
 
