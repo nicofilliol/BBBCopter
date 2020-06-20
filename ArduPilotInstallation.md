@@ -182,20 +182,39 @@ _Option 1_: Connect the BeagleBoard to your computer over USB and install [drive
     sudo chmod 0755 /usr/bin/ardupilot/aphw
     ```
 
-5. Now we have to get the latest ArduCopter (or ArduPlane, ArduRover) executable, built specifically for the BeagleBone Blue's ARM architecture. 
+5. Now we have to get the latest ArduCopter (or ArduPlane, ArduRover) executable, built specifically for the BeagleBone Blue's ARM architecture. You can find some pre-built binaries in the `ardupilot` folder of this repository which you can copy to `usr/bin/ardupilot` on your BBB. Make sure to also make them executable (last line of code below).
 
     Compiling on the BeagleBone itself works as follows but it will take quite some time:
     ```shell
     sudo apt-get install g++ make pkg-config python python-dev python-lxml python-pip
     sudo pip install future
-    git clone https://github.com/ArduPilot/ardupilot
+    git clone https://github.com/ArduPilot/ardupilot.git
     cd ardupilot
     git branch -a  # <-- See all available branches.
-    git checkout Copter-3.6.8-hotfix # <-- Select one of the ArduCopter branches.
+    git checkout Copter-4.0 # <-- Select one of the ArduCopter branches.
     git submodule update --init --recursive
     ./waf configure --board=blue  # <-- BeagleBone Blue.
     ./waf
     sudo cp ./build/blue/bin/a* /usr/bin/ardupilot
+    sudo chmod 0755 /usr/bin/ardupilot/a*
+    ```
+
+    Alternatively, here are instructions for cross-compiling on a computer running Ubuntu which is significantly faster:
+    ```shell
+    cd ~
+    git clone https://github.com/ArduPilot/ardupilot.git
+    cd ardupilot
+    Tools/environment_install/install-prereqs-ubuntu.sh -y
+    . ~/.profile
+    git branch -a # <-- See all available branches.
+    git checkout Copter-4.0
+    git submodule update --init --recursive
+    ./waf configure --board=blue  # <-- BeagleBone Blue.
+    ./waf
+    scp build/blue/bin/* debian@beaglebone:/usr/bin/ardupilot # <-- Copy files to BeagleBone
+    ```
+    Don't forget to make the binaries exectuble on your BeagleBone:
+    ```shell
     sudo chmod 0755 /usr/bin/ardupilot/a*
     ```
 
