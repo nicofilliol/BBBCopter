@@ -1,4 +1,4 @@
-#ArduPilot BeagleBone Blue Binaries
+# ArduPilot BeagleBone Blue Binaries
 
 This folder contains the following pre-built binaries of ArduPilot 4.0.3 for the BeagleBone Blue:
 
